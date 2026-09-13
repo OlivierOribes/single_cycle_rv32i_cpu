@@ -43,5 +43,5 @@ A single GPIO register is memory-mapped: a `SW` to `GPIO_LED_ADDR` (see [`cpu_pk
 
 ### Clock
 
-`clk_i` (the board's 100 MHz oscillator) is divided by [`wizard_clock.vhd`](src/CPU_top/wizard_clock.vhd) into the `clk` used everywhere else in the datapath, so the CPU visibly runs slow enough to see the LEDs blink.
+`clk_i` (the board's 100 MHz oscillator) is divided by [`wizard_clock.vhd`](src/CPU_top/wizard_clock.vhd) into the `clk` used everywhere else in the datapath, so the CPU runs slow enough to complete the instruction in one single.
 
