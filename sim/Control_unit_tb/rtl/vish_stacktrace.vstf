@@ -1,0 +1,19 @@
+# Current time Sun Aug 23 12:42:24 2026
+# ModelSim - Intel FPGA Edition Stack Trace
+# Program = vish
+# Id = "2020.1"
+# Version = "2020.02"
+# Date = "Feb 28 2020"
+# Platform = "linuxaloem"
+# 0    0x08279d2f: 'get_td_total_width + 0xf' in '/home/olivier/intelFPGA/20.1/modelsim_ase/linuxaloem/vish'
+# 1    0x0834c775: '<unknown (@0x834c775)>'
+# 2    0x0834fd9c: 'wlfAppendDelayedSignalEventCB + 0x3fc' in '/home/olivier/intelFPGA/20.1/modelsim_ase/linuxaloem/vish'
+# 3    0x08350339: 'wlfAddDelayedSignalEventCB + 0x89' in '/home/olivier/intelFPGA/20.1/modelsim_ase/linuxaloem/vish'
+# 4    0x083504a5: 'wlfAddSignalEventCB + 0x55' in '/home/olivier/intelFPGA/20.1/modelsim_ase/linuxaloem/vish'
+# 5    0x082c3a67: '<unknown (@0x82c3a67)>'
+# 6    0x082a63a1: 'tree_iterate + 0x121' in '/home/olivier/intelFPGA/20.1/modelsim_ase/linuxaloem/vish'
+# 7    0x082d4afb: 'ts_wave_update + 0x2db' in '/home/olivier/intelFPGA/20.1/modelsim_ase/linuxaloem/vish'
+# 8    0x08344c7b: '<unknown (@0x8344c7b)>'
+# 9    0x086676a3: 'TclServiceIdle + 0x33' in '/home/olivier/intelFPGA/20.1/modelsim_ase/linuxaloem/vish'
+# 10   0x00006c86: '<unknown (@0x6c86)>'
+# 11   0x0000126e: '<unknown (@0x126e)>'

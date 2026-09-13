@@ -7,9 +7,9 @@
 --
 --  Author      : Olivier Oribes
 --  Created     : 29/03/2026
---  Last update : 29/03/2026
+--  Last update : 02/09/2026
 --
---  Version     : 1.0
+--  Version     : 1.1
 --
 --  Project     : CPU_Single_cycle
 --  Language    : VHDL
@@ -26,13 +26,28 @@ package cpu_pkg is
     --------------------------------------------------------------------------
     -- Architecture constants
     --------------------------------------------------------------------------
-    constant DATA_WIDTH  : integer := 32;   -- Data bus width (bits)
-    constant ADDR_WIDTH  : integer := 32;   -- Address bus width (bits)
+    constant DATA_WIDTH     : natural := 32;                 -- Data bus width (bits)
+    constant ADDR_WIDTH     : natural := 32;                 -- Address bus width (bits)
+    constant IMEM_SIZE      : natural := 8*1024;             -- size of processor-internal instruction memory in bytes
+    constant DMEM_SIZE      : natural := 16*1024;            -- size of processor-internal data memory in bytes
+    constant DATA_DEPTH     : natural := DMEM_SIZE/4;        -- number of words in the data memory
+    constant INST_DEPTH     : natural := IMEM_SIZE/4;        -- number of words in the instruction memory
+    constant BYTE_IN_WORD   : integer := (DATA_WIDTH/8);     -- Number of byte in a word
+    constant BYTE_WIDTH     : integer := DATA_WIDTH/BYTE_IN_WORD;
+
+    --------------------------------------------------------------------------
+    -- Memory-mapping
+    --------------------------------------------------------------------------
+
+    constant IMEM_BASE_ADDR : std_ulogic_vector(31 downto 0) := x"0000_0000";
+    constant DMEM_BASE_ADDR : std_ulogic_vector(31 downto 0) := x"1000_0000";
+    constant GPIO_LED_ADDR  : std_ulogic_vector(31 downto 0) := x"4000_0000";
 
     --------------------------------------------------------------------------
     -- Common subtypes
     --------------------------------------------------------------------------
-
+    
+    -- ALU operation
     type alu_op_t is (
         ALU_NOP,
         ALU_ADD,
@@ -42,9 +57,35 @@ package cpu_pkg is
         ALU_XOR,
         ALU_SLL,
         ALU_SRL,
-        ALU_SLT
+        ALU_SRA,
+        ALU_SLT,
+        ALU_SLTU
     );
 
+    -- PC operation ( branch, jump)
+    type pc_src_t is (
+        PC_DEFAULT,
+        BRANCH,
+        JUMP
+    );
+
+    -- Register file array
+    type reg_array is array (0 to 31) of std_ulogic_vector(DATA_WIDTH-1 downto 0);
+
+    -- Memory array
+    type dmem_ram_t is array (DATA_DEPTH-1 downto 0) of std_ulogic_vector(DATA_WIDTH-1 downto 0);
+    type imem_ram_t is array (INST_DEPTH-1 downto 0) of std_ulogic_vector(DATA_WIDTH-1 downto 0);
+    
+    -- Instruction OP CODE
+    constant OPCODE_RTYPE  : std_ulogic_vector(6 downto 0) := "0110011";
+    constant OPCODE_ITYPE  : std_ulogic_vector(6 downto 0) := "0010011";
+    constant OPCODE_LOAD   : std_ulogic_vector(6 downto 0) := "0000011";
+    constant OPCODE_STORE  : std_ulogic_vector(6 downto 0) := "0100011";
+    constant OPCODE_BRANCH : std_ulogic_vector(6 downto 0) := "1100011";
+    constant OPCODE_JAL    : std_ulogic_vector(6 downto 0) := "1101111";
+    constant OPCODE_JALR   : std_ulogic_vector(6 downto 0) := "1100111";
+    constant OPCODE_LUI    : std_ulogic_vector(6 downto 0) := "0110111";
+    constant OPCODE_AUIPC  : std_ulogic_vector(6 downto 0) := "0010111";
     --------------------------------------------------------------------------
     -- Functions
     --------------------------------------------------------------------------

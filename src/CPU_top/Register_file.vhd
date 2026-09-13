@@ -14,9 +14,9 @@
 --
 --  Author      : Olivier Oribes
 --  Created     : 25/03/2026
---  Last update : 30/03/2026
+--  Last update : 02/09/2026
 --
---  Version     : 1.1
+--  Version     : 1.2
 --
 --  Project     : CPU_Single_cycle
 --  Language    : VHDL
@@ -30,7 +30,6 @@
 --
 --  Ports:
 --      clk          : input                      - system clock
---      rst_n        : input                      - active-low reset
 --      write_enable : input                      - register write enable
 --      rs1          : input  [4:0]               - source register 1
 --      rs2          : input  [4:0]               - source register 2
@@ -50,7 +49,6 @@ use work.cpu_pkg.all;
 entity register_file is
     port (
         clk          : in  std_ulogic;
-        rst_n        : in  std_ulogic; -- asynchronous active-low reset
 
         -- Writes
         write_enable : in  std_ulogic;
@@ -67,26 +65,19 @@ end entity register_file;
 
 architecture rtl of register_file is
 
-    type reg_array is array (0 to 31) of std_ulogic_vector(DATA_WIDTH-1 downto 0);
     signal regfile : reg_array := (others => (others => '0'));
 
 begin
 
     -- Synchronous write port with active-low reset
-    proc_ff : process(clk, rst_n)
+    proc_ff : process(clk)
+    
     begin
 
-        if rst_n = '0' then
-
-            for i in 0 to 31 loop
-
-                regfile(i) <= (others => '0');
-            end loop;
-        
-        elsif rising_edge(clk) then
+        if rising_edge(clk) then
 
             if (write_enable = '1') and (rd /= "00000") then  -- x0 hardwired to zero, ignore writes
-                    
+                
                 regfile(to_int(rd)) <= write_data;
 
             end if;
